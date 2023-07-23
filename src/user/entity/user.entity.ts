@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AddressEntity } from "src/address/entity/address.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity({ name: 'user'})
@@ -31,4 +32,7 @@ export class UserEntity {
 
    @UpdateDateColumn({name: 'updated_at'})
    updatedAt: Date;
+
+   @OneToMany(() => AddressEntity, (addresses) => addresses.user)
+   addresses?: AddressEntity[]
 }

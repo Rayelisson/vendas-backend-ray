@@ -4,10 +4,20 @@ import { CreatesUserDto } from './dtos/createsUser.dto';
 import { UserService } from './user.service';
 import { UserEntity } from './entity/user.entity';
 import { ReturnUserDto } from './dtos/returnUser.dto';
+import { UpdatePasswordDTO } from './dtos/update-password.dto';
 
 
 @Controller('/user')
 export class UserController {
+  getInfoUser(id: number) {
+    throw new Error('Method not implemented.');
+  }
+  updatePasswordUser(updatePasswordMock: UpdatePasswordDTO, id: number) {
+    throw new Error('Method not implemented.');
+  }
+  createAdmin(createUserMock: CreatesUserDto) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly userService: UserService){}
 
   @UsePipes(ValidationPipe)

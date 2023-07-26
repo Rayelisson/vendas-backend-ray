@@ -1,22 +1,23 @@
 /* eslint-disable prettier/prettier */
 
-import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatesUserDto } from './dtos/createsUser.dto';
 import { hash } from 'bcrypt';
 import { UserEntity } from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
+import { UserType } from './enum/user-type.enum';
+import { createPasswordHashed, validatePassword } from 'src/utils/password';
 
 @Injectable()
 export class UserService {
-  updatePasswordUser(updatePasswordMock: UpdatePasswordDTO, id: number): any {
-    throw new Error('Method not implemented.');
-  }
   constructor(
      @InjectRepository(UserEntity)
      private readonly userRepository: Repository<UserEntity>,
   ) {}
+
+
 
    async createUser(createUserDto: CreatesUserDto): Promise<UserEntity>{
       const user = await this.findUserByEmail(createUserDto.email).catch(
@@ -27,13 +28,13 @@ export class UserService {
          throw new BadGatewayException('email registered in system');
        }
 
-    const saltOrRunds = 10;
-
-    const passwordHashed = await hash(createUserDto.password, saltOrRunds);
+       const passwordHashed = await createPasswordHashed(
+         createUserDto.password
+         )
 
     return this.userRepository.save({
         ...createUserDto,
-        typeUser: 1,
+        typeUser: UserType.User,
         password: passwordHashed,
     }) 
   }
@@ -84,4 +85,30 @@ export class UserService {
 
    return user
  }
+
+
+ async updatePasswordUser(
+   updatePasswordDTO: UpdatePasswordDTO, 
+     userId: number,
+   ): Promise<UserEntity> {
+     const user = await this.findUserById(userId)
+
+     const passwordHasbed = await createPasswordHashed(
+        updatePasswordDTO.newPassword,
+      )
+
+      const isMatch = await validatePassword(
+          updatePasswordDTO.lastPassword,
+          user.password || '',
+         )
+
+         if (!isMatch) {
+            throw new BadRequestException('Last password invalid')
+          }
+
+      return this.userRepository.save({
+        ...user,
+        password: passwordHasbed,
+      })
+   }
  }

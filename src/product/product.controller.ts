@@ -21,7 +21,7 @@ export class ProductController {
         )
     }
 
-    @Roles(UserType.Admin)
+    @Roles(UserType.User)
     @UsePipes(ValidationPipe)
     @Post()
     async createProduct(@Body() createProduct: CreateProductDto,

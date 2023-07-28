@@ -11,7 +11,7 @@ export class CartProductEntity {
    id: number
 
    @Column({name: 'cart_id', nullable: false })
-   cartId: string
+   cartId: number
 
    @Column({name: 'product_id', nullable: false })
     productId: number

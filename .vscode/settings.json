@@ -1,4 +1,19 @@
 {
     "jira-plugin.workingProject": "",
-    "vscode-corda.isCordaProject": false
+    "vscode-corda.isCordaProject": false,
+    "workbench.colorTheme": "Xcode Classic Dark",
+    "material-icon-theme.activeIconPack": "nest",
+    "material-icon-theme.files.associations": {
+        "*.controller.ts": "nest-controller",
+        "*.module.ts": "nest-module",
+        "*.service.ts": "nest-service",
+        "*.decorator.ts": "nest-decorator",
+        "*.middleware.ts": "nest-middleware",
+        "*.filter.ts": "nest-filter",
+        "*.gateway.ts": "nest-gateway",
+        "*.guard.ts": "nest-guard",
+        "*.pipe.ts": "nest-pipe",
+        "*.resolver.ts": "nest-resolver",
+        "*.input.ts": "graphql",
+        },
 }

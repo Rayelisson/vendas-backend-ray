@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 
 import { CityEntity } from "src/city/entity/city.entity";
+import { OrderEntity } from "src/order/entity/order.entity";
 import { UserEntity } from "src/user/entity/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity({ name: 'address'})
@@ -39,4 +40,7 @@ export class AddressEntity {
    @ManyToOne(() => CityEntity, (city) => city.addresses)
    @JoinColumn({ name: 'city_id', referencedColumnName: 'id' })
    city?: CityEntity;
+
+   @OneToMany(() => OrderEntity, (order) => order.address)
+   orders?: OrderEntity[]
 }

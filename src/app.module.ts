@@ -19,6 +19,9 @@ import { CategoryModule } from './category/category.module';
 import { CartModule } from './cart/cart.module';
 import { CartProductModule } from './cart-product/cart-product.module';
 import { PaymentStatusModule } from './payment-status/payment-status.module';
+import { PaymentModule } from './payment/payment.module';
+import { OrderProductModule } from './order-product/order-product.module';
+import { OrderModule } from './order/order.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -47,6 +50,9 @@ import { PaymentStatusModule } from './payment-status/payment-status.module';
     CartModule,
     CartProductModule,
     PaymentStatusModule,
+    PaymentModule,
+    OrderProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [

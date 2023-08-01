@@ -3,7 +3,7 @@
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entity/product.entity';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, In, Repository } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { CategoryService } from '../category/category.service';
@@ -14,10 +14,22 @@ export class ProductService {
     constructor(
         @InjectRepository(ProductEntity)
         private readonly productRepository: Repository<ProductEntity>,
-        private readonly categoryService: CategoryService
+        private readonly categoryService: CategoryService,
+        
     ) {}
 
-    async findAll(): Promise<ProductEntity[]> {
+    async findAll(productId?: number[]): Promise<ProductEntity[]> {
+      let findOpitions = {}
+
+      if (productId && productId.length > 0) {
+        findOpitions = {
+         whire: {
+           id: In(productId)
+         },
+        }
+      }
+
+
       const products = await this.productRepository.find()
 
       if (!products || products.length === 0) {
@@ -26,6 +38,7 @@ export class ProductService {
 
      return products
     }
+
 
     async createProduct(createProduct: CreateProductDto): Promise<ProductEntity> {
       await this.categoryService.findCategoryById(createProduct.categoryId)

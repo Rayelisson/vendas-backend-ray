@@ -10,11 +10,9 @@ import { PaymentEntity } from 'src/payment/entity/payment.entity';
 import { CartService } from 'src/cart/cart.service';
 import { OrderProductService } from 'src/order-product/order-product.service';
 import { ProductService } from 'src/product/product.service';
-import { UserId } from '../decorators/user-id.decoratotor';
 import { OrderProductEntity } from 'src/order-product/entity/order-product.entity';
 import { CartEntity } from 'src/cart/entity/cart.entity';
 import { ProductEntity } from 'src/product/entity/product.entity';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class OrderService {
@@ -80,10 +78,11 @@ export class OrderService {
       return order
     }
 
-    async fincOrderByUserId(userId: number): Promise<OrderEntity[]> {
+    async fincOrderByUserId(userId?: number, orderId?: number,): Promise<OrderEntity[]> {
      const orders = await this.orderRepository.find({
        where: {
          userId,
+         id: orderId,
        },
        relations: {
         address: true,
@@ -93,6 +92,7 @@ export class OrderService {
          payment: {
           paymentStatus: true,
          },
+         user: !!orderId,
        },
     })
 
@@ -102,4 +102,19 @@ export class OrderService {
 
      return orders
     }
+
+    async findAllOrders(): Promise<OrderEntity[]> {
+      const orders = await this.orderRepository.find({
+          relations: {
+           user: true,
+          },
+      })
+      
+      if (!orders || orders.length === 0) {
+        throw new NotFoundException('Order not found')
+       } 
+       return orders
+      }
+
+     
 }

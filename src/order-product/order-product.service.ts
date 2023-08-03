@@ -5,6 +5,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderProductEntity } from './entity/order-product.entity';
 import { In, Not, Repository } from 'typeorm';
+import { ReturnGroupOrder } from './dtos/return-group-order.dto';
 
 @Injectable()
 export class OrderProductService {
@@ -30,12 +31,12 @@ export class OrderProductService {
     })
   }
 
-  async findAmoudProductByOrderId(orderId: number[]): Promise<number> {
-    const amount = await this.orderProductRepository.count({
-      where: {
-         id:In(orderId),
-      },
-    })
-    return amount
+  async findAmoudProductByOrderId(orderId: number[]): Promise<ReturnGroupOrder[]> {
+    return this.orderProductRepository
+    .createQueryBuilder('order_product')
+    .select('order_product.order_id, COUNT(*) as total')
+    .where('order_product.order_id IN (:...ids)', { ids: orderId })
+    .groupBy('order_product.order_id')
+    .getRawMany();
   }
 }

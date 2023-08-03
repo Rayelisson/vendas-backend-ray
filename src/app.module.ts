@@ -22,6 +22,7 @@ import { PaymentStatusModule } from './payment-status/payment-status.module';
 import { PaymentModule } from './payment/payment.module';
 import { OrderProductModule } from './order-product/order-product.module';
 import { OrderModule } from './order/order.module';
+import { CarreiosModule } from './carreios/carreios.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -53,6 +54,7 @@ import { OrderModule } from './order/order.module';
     PaymentModule,
     OrderProductModule,
     OrderModule,
+    CarreiosModule,
   ],
   controllers: [AppController],
   providers: [

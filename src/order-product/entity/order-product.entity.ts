@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 
+import { ReturnAddressDto } from 'src/address/dtos/returnAddress.dto';
 import { OrderEntity } from 'src/order/entity/order.entity';
 import { ProductEntity } from 'src/product/entity/product.entity';
 import {
@@ -35,13 +36,12 @@ export class OrderProductEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => OrderEntity, (order) =>  order.ordersProduct)
-  @JoinColumn({ name: 'order_id' , referencedColumnName: 'id' })
-   order: OrderEntity
+  @ManyToOne(() => OrderEntity, (order) => order.ordersProduct)
+  @JoinColumn({ name: 'order_id', referencedColumnName: 'id' })
+  order?: OrderEntity;
 
-
-  @ManyToOne(() => ProductEntity, (product) =>  product.ordersProduct)
-  @JoinColumn({ name: 'product_id' , referencedColumnName: 'id' })
-   product: ProductEntity
+  @ManyToOne(() => ProductEntity, (product) => product.ordersProduct)
+  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
+  product?: ProductEntity;
 
 }

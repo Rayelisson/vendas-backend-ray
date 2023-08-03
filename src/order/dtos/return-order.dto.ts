@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
 
 
-import { ReturnUserDto } from "src/user/dtos/returnUser.dto"
-import { OrderEntity } from "../entity/order.entity"
-import { ReturnAddressDto } from "src/address/dtos/returnAddress.dto"
-import { ReturnPaymentDTO } from "src/payment/dtos/return-payment.dto"
-import { ReturnOrderProductDTO } from "src/order-product/dtos/return-order-product.dto"
-
+import { ReturnOrderProductDTO } from '../../order-product/dtos/return-order-product.dto';
+import { ReturnAddressDto } from '../../address/dtos/returnAddress.dto';
+import { ReturnPaymentDTO } from '../../payment/dtos/return-payment.dto';
+import { ReturnUserDto } from '../../user/dtos/returnUser.dto';
+import { OrderEntity } from '../entity/order.entity';
 
 export class ReturnOrderDTO {
   id: number;
@@ -33,5 +32,11 @@ export class ReturnOrderDTO {
     this.payment = order?.payment
       ? new ReturnPaymentDTO(order?.payment)
       : undefined;
+    this.ordersProduct = order?.ordersProduct
+      ? order?.ordersProduct.map(
+        (orderProduct) => new ReturnOrderProductDTO(orderProduct),
+      )
+      : undefined;
+    this.amountProducts = order?.amountProduct;
   }
 }

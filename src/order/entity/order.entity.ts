@@ -50,6 +50,8 @@ export class OrderEntity {
   payment: PaymentEntity
 
   @OneToMany(() => OrderProductEntity, (ordersProduct) => ordersProduct.order)
-  ordersProduct: OrderProductEntity
+  ordersProduct: OrderProductEntity[]
+
+  amountProduct?: number
 
 }

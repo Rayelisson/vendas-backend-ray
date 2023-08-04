@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsNumber, IsString } from "class-validator"
+import { IsNumber, IsOptional, IsString } from "class-validator"
 
 export class CreateProductDto {
 
@@ -15,5 +15,25 @@ export class CreateProductDto {
 
    @IsString()
    image: string
+
+  @IsOptional()
+  @IsNumber()
+  weight?: number;
+
+  @IsOptional()
+  @IsNumber()
+  length?: number;
+
+  @IsOptional()
+  @IsNumber()
+  height?: number;
+
+  @IsOptional()
+  @IsNumber()
+  width?: number;
+
+  @IsOptional()
+  @IsNumber()
+  diameter?: number;
 
 }

@@ -2,11 +2,13 @@
 
 import { Controller, Get, Param } from '@nestjs/common';
 import { CarreiosService } from './carreios.service';
-import { ReturnCep } from './dto/return-cep-external.dto';
+import { ReturnCep } from './dto/return-cep.dto';
 
 @Controller('carreios')
 export class CarreiosController {
    constructor( private readonly correiosService: CarreiosService) {}
+
+
 
    @Get('/:cep')
    async findAll(@Param('cep') cep: string): Promise<ReturnCep> {

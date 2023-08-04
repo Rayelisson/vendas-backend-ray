@@ -6,9 +6,12 @@ import { ProductController } from './product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from './entity/product.entity';
 import { CategoryModule } from 'src/category/category.module';
+import { CarreiosModule } from 'src/carreios/carreios.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductEntity]),
+  imports: [
+  CarreiosModule,
+  TypeOrmModule.forFeature([ProductEntity]),
   forwardRef(() => CategoryModule),
 ],
   providers: [ProductService],

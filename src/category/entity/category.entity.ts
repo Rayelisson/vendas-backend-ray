@@ -19,6 +19,6 @@ createdAt: Date;
 updatedAt: Date;
 
 @OneToMany(() => ProductEntity, (product: ProductEntity) => product.category)
-products: ProductEntity
+products?: ProductEntity[]
 
 }

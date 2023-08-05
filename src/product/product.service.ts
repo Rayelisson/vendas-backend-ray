@@ -3,7 +3,7 @@
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entity/product.entity';
-import { DeleteResult, In, Repository } from 'typeorm';
+import { DeleteResult, ILike, In, Repository } from 'typeorm';
 import { Injectable, NotFoundException, forwardRef, Inject, BadRequestException } from '@nestjs/common';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { CategoryService } from '../category/category.service';
@@ -13,6 +13,10 @@ import { SizeProductDTO } from 'src/carreios/dto/size-product';
 import { CarreiosService } from 'src/carreios/carreios.service';
 import { CdServiceEnum } from 'src/carreios/enums/cd-service.enum';
 import { ReturnPriceDeliveryDto } from './dtos/return-price-delivery.dto';
+import { Pagination, PaginationMeta } from 'src/dtos/pagination.dto';
+
+const DEFAULT_PAGE_SIZE = 10
+const FIRST_PAGE = 1
 
 @Injectable()
 export class ProductService {
@@ -26,6 +30,37 @@ export class ProductService {
         private readonly correiosService: CarreiosService
         
     ) {}
+
+    async findAllPage(
+      search?: string, 
+      size = DEFAULT_PAGE_SIZE, 
+      page = FIRST_PAGE,
+      ): Promise<Pagination<ProductEntity[]>> {
+        const skip = (page - 1) * size
+      let findOpitions = {}
+      if(search) {
+        findOpitions = {
+          where: {
+            name: ILike(`%${search}%`),
+            },
+          }
+        }
+      const [products, total] = await this.productRepository.findAndCount({
+        ...findOpitions,
+        take: size,
+        skip,
+
+      })
+
+      if (!products || products.length === 0) {
+        throw new NotFoundException('Not found product')
+    }
+
+     return new Pagination(new PaginationMeta(Number(size), total, Number(page), Math.ceil(total / size)), 
+     products
+     )
+    }
+    
 
     async findAll(productId?: number[], isFindRelations?: boolean,): Promise<ProductEntity[]> {
       let findOpitions = {}
@@ -72,12 +107,17 @@ export class ProductService {
      })
     }
 
-    async findProductById(productId: number): Promise<ProductEntity> {
+    async findProductById(productId: number, isRelations?: boolean): Promise<ProductEntity> {
+      const relations = isRelations ? {
+        category: true,
+      } : undefined
        const product = await this.productRepository.findOne({
           where: {
              id: productId,
             },
+            relations,
         })
+        
 
         if (!product) {
             throw new NotFoundException(`Product id: ${productId} not found`)

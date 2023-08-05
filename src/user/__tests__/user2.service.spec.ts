@@ -106,9 +106,9 @@ describe('UserService', () => {
     const spy = jest.spyOn(userRepository, 'save');
     jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
 
-    await service.createUser(createUserMock, UserType.Admin);
+    await service.createUser(createUserMock, UserType.Admin,  UserType.Root);
 
-    expect(spy.mock.calls[0][0].typeUser).toEqual(UserType.Admin);
+    expect(spy.mock.calls[0][0].typeUser).toEqual(UserType.Admin,  UserType.Root);
   });
 
   it('should return user in update password', async () => {

@@ -3,11 +3,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryEntity } from './entity/category.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateCategory } from './dtos/create-category.dto';
 import { ProductService } from 'src/product/product.service';
 import { ReturnCategory } from './dtos/return-category.dto';
 import { CountProduct } from 'src/product/dtos/count-product.dto';
+import { UpdateCategory } from './dtos/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -46,11 +47,15 @@ export class CategoryService {
      return categories.map((category) => new ReturnCategory(category, this.findAmountCategoryInProducts(category, count)))
     }
 
-    async findCategoryById(categoryId: number): Promise<CategoryEntity> {
+    async findCategoryById(categoryId: number, isRelations?: boolean,): Promise<CategoryEntity> {
+       const relations = isRelations ? {
+         products: true,
+        } : undefined
         const category = await this.categoryRepository.findOne({
          where: {
             id: categoryId,
            },
+           relations,
         })
  
         if (!category) {
@@ -91,4 +96,23 @@ export class CategoryService {
 
       return this.categoryRepository.save(createCategory)
     }
+
+    async deleteCategory(categoryId: number): Promise<DeleteResult> {
+      const category = await this.findCategoryById(categoryId)
+
+      if (category.products?.length > 0) {
+        throw new BadRequestException('Category with relations') 
+       }
+     return this.categoryRepository.delete({ id: categoryId})
+    }
+
+    async editCategory(categoryId: number, updateCategory: UpdateCategory ): Promise<CategoryEntity> {
+      const category = await this.findCategoryById(categoryId)
+
+      return this.categoryRepository.save({
+      ...category,
+      ...updateCategory,
+      })
+    }
+
 }

@@ -14,13 +14,19 @@ import { Roles } from '../decorators/role.decorator';
 export class UserController {
   constructor(private readonly userService: UserService){}
 
-  @UsePipes(ValidationPipe)
+  @Roles(UserType.Root)
   @Post()
+  async createAdmin(@Body() createUser: CreatesUserDto): Promise<UserEntity> {
+    return this.userService.createUser(createUser)
+  }
+
+  @UsePipes(ValidationPipe)
+  @Post('/admin')
   async createUser(@Body() createUser: CreatesUserDto): Promise<UserEntity> {
-   return this.userService.createUser(createUser);
+   return this.userService.createUser(createUser, UserType.Admin);
    }
 
-   @Roles(UserType.Admin)
+   @Roles(UserType.Admin,  UserType.Root)
    @Get('/all')
    async getAllUser(): Promise<ReturnUserDto[]> {
       return (await this.userService.getAllUser()).map(
@@ -36,7 +42,7 @@ export class UserController {
   }
 
   @Patch()
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin,  UserType.Root)
     @UsePipes(ValidationPipe)
     async updatePasswordUser(
         @Body() updatePasswordDTO: UpdatePasswordDTO,
@@ -45,7 +51,7 @@ export class UserController {
        return this.userService.updatePasswordUser(updatePasswordDTO, userId)
     }
 
-    @Roles(UserType.Admin, UserType.User)
+    @Roles(UserType.Admin,  UserType.Root, UserType.User)
     @Get()
     async getInfoUser(@UserId() userId: number): Promise<ReturnUserDto> {
       return new ReturnUserDto(

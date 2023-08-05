@@ -14,7 +14,7 @@ export class AddressController {
   
     constructor(private readonly addressService: AddressService) {}
 
-    @Roles(UserType.Admin)
+    @Roles(UserType.Admin,  UserType.Root)
     @Post()
     @UsePipes(ValidationPipe)
     async createAddress(

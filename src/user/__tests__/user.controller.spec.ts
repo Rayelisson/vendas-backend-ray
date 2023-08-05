@@ -51,7 +51,7 @@ describe('UserController', () => {
     const user = await controller.createAdmin(createUserMock);
 
     expect(user).toEqual(userEntityMock);
-    expect(spy.mock.calls[0][1]).toEqual(UserType.Admin);
+    expect(spy.mock.calls[0][1]).toEqual(UserType.Admin,  UserType.Root);
   });
 
   it('should return ReturnUser in getAllUser', async () => {

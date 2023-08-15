@@ -20,7 +20,7 @@ export class CategoryController {
        return this.categoryService.findAllCategories()
    }
 
-    @Roles(UserType.Admin,  UserType.Root)
+    @Roles(UserType.Admin,  UserType.Root, UserType.User )
     @UsePipes(ValidationPipe)
     @Post()
     async createCategory(
@@ -29,13 +29,13 @@ export class CategoryController {
        return this.categoryService.createCategory(createCategory)
     }
     
-    @Roles(UserType.Admin,  UserType.Root)
+    @Roles(UserType.Admin,  UserType.Root, UserType.User)
     @Delete(':categoryId')
     async deleteCategory(@Param('categoryId') categoryId: number,): Promise<DeleteResult> {
         return this.categoryService.deleteCategory(categoryId)
     }
 
-    @Roles(UserType.Admin,  UserType.Root)
+    @Roles(UserType.Admin,  UserType.Root, UserType.User)
     @Put(':categoryId')
     async editCategory(
       @Param('categoryId') categoryId: number,

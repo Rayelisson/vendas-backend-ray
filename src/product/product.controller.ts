@@ -40,9 +40,9 @@ export class ProductController {
         return new ReturnProduct(
          await this.productService.findProductById(productId, true),
          )
-      }
+      } 
 
-    @Roles(UserType.User)
+    @Roles(UserType.User, UserType.Admin,UserType.Root)
     @UsePipes(ValidationPipe)
     @Post()
     async createProduct(@Body() createProduct: CreateProductDto,
